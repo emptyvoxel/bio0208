@@ -1,8 +1,40 @@
 # Helper functions para a P2 de Processos
 library("ggplot2")
+library("dplyr")
 library("gridExtra")
 
 dataset <- read.csv("dataset.csv")
+
+# Questão 1 (orquestra porque são vários violinos)
+orchestra <- function(df, caractere, ylab) {
+  # Cria uma coluna temporária chamada "Total" agrupando os dois sexos
+  temp <- bind_rows(df, df %>% mutate(sexo="Total"))
+  
+  ggplot(temp, aes_string(x="sexo", y=caractere, fill="sexo")) +
+    geom_violin(trim=FALSE, alpha=.4) +
+    geom_boxplot(width=.15, outlier.shape=NA, alpha=.8) +
+    labs(x="Grupo", y=ylab) +
+    theme_minimal() +
+    scale_fill_manual(
+      values = c(
+        "F" = "steelblue", "M" = "tomato", "Total" = "gray60"
+      )
+    )
+}
+
+q1_violins <- function() {
+  # Gera o plot para cada caractere
+  altura <- orchestra(dataset, "alturaFilial", ylab="Altura")
+  peso <- orchestra(dataset, "pesoFilial", ylab="Peso")
+  pe <- orchestra(dataset, "peFilial", ylab="Comprimento do Pé")
+  pesoNasc <- orchestra(dataset, "pesoNascFilial", ylab="Peso ao Nascimento")
+
+  # Exibe todos os plots em um grid 2x2
+  plot <- grid.arrange(altura, peso, pe, pesoNasc, ncol = 2)
+  ggsave("./images/comparação-médias.png", plot, width=10, height=8, dpi=200)
+}
+
+q1_violins()
 
 # Questão 3 - Herdabilidade
 herdabilidade <- function(df, parental, filial, xlab, ylab) {
