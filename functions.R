@@ -131,14 +131,6 @@ q3_plots <- function() {
 # ======================================================================
 # Questão 5 - Correlações fenotípicas
 # ======================================================================
-# Reordena a matriz de correlação - Retirado de [1]
-reorder_cormat <- function(cormat){
-  dd <- as.dist((1-cormat)/2)
-  hc <- hclust(dd)
-  cormat <-cormat[hc$order, hc$order]
-  return(cormat)
-}
-
 # Remove a redundância da matriz de correlação - Retirado de [1]
 get_upper_tri <- function(cormat){
   cormat[lower.tri(cormat)] <- NA
@@ -153,7 +145,6 @@ correlacao_caracteres <- function(df, caracteres) {
   
   # Gera uma matriz de correlação e retorna seu triângulo superior
   matriz_corr <- cor(colunas, use="pairwise.complete.obs")
-  matriz_corr <- reorder_cormat(matriz_corr)
   matriz_corr <- round(matriz_corr, 2)
   upper_tri <- get_upper_tri(matriz_corr)
   melted <- melt(upper_tri, na.rm=TRUE)
@@ -190,11 +181,12 @@ correlacao_caracteres <- function(df, caracteres) {
   ggsave("./images/correlação fenotípica.png", plot, width=6, height=6, dpi=200)
 }
 
-q6_plot <- function() {
-  correlacao_caracteres(dataset, c(23, 24, 25, 26, 16, 17, 18, 19))
+q5_plot <- function() {
+  correlacao_caracteres(dataset, c(
+    23, 24, 25, 26, # caracteres filiais (SEMS)
+    16, 17, 18, 19  # caracteres parentais
+  ))
 }
-
-q6_plot()
 
 # FONTES
 # [1] https://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization
