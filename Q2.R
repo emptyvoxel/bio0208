@@ -5,6 +5,7 @@ library("ggplot2")
 library("tidyr")
 library("dplyr")
 library("gridExtra")
+source("functions.R")
 
 dataset <- read.csv("dataset.csv")
 
@@ -26,26 +27,12 @@ efeitos <- function(fenotipo, alelos) {
   ))
 }
 
-efeitos(dataset$alturaMae, dataset$g1_c17_M)
-
 # Regressão e efeito médio de substituição
-q2_plot <- function() {
-  model <- lm(temp$alturaMae ~ temp$g1_c17_M, data=temp)
+q2_plot <- function(df, fenotipo, locus, xlab, ylab) {
+  plot <- regressao(df=df, x=locus, y=fenotipo, xlab=xlab, ylab=ylab)
   
-  # Valores arredondados para 4 casas decimais
-  slope <- round(coef(model)[2], 3)
-  intercept <- round(coef(model)[1], 2)
-  r2 <- round(summary(model)$r.squared, 4)
-  
-  label <- paste0("y = ", slope, "x", intercept, "  R² = ", r2)
-  
-  ggplot(temp, aes(y=temp$alturaMae, x=temp$g1_c17_M)) +
-    geom_point(color="steelblue") + 
-    geom_smooth(method="lm", se=TRUE, color="gray20") +
-    annotate(
-      "text",
-      x=Inf, y=Inf, hjust=1.4, vjust=1.5, size=4,
-      label=label
-    ) +
-    theme_minimal()
+  ggsave("./images/efeito médio de substituição.png", plot, width=6, height=4, dpi=200)
 }
+
+q2_plot(dataset, "alturaMae", "g1_c17_M", "Genótipo g1_c17", "Altura Materna")
+

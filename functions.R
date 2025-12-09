@@ -7,9 +7,6 @@ library("reshape2")
 
 dataset <- read.csv("dataset.csv")
 
-# ======================================================================
-# Questão 5 - Correlações fenotípicas
-# ======================================================================
 # Remove a redundância da matriz de correlação - Retirado de [1]
 get_upper_tri <- function(cormat){
   cormat[lower.tri(cormat)] <- NA
@@ -18,7 +15,7 @@ get_upper_tri <- function(cormat){
 
 # Produz uma matriz de correlação entre os caracteres
 # Código parcialmente adaptado de [1]
-correlacao_caracteres <- function(df, caracteres) {
+matriz_correlacao <- function(df, caracteres, title) {
   # Filtra os caracteres e gera uma matriz de correlação
   colunas <- df[, caracteres]
   
@@ -56,15 +53,38 @@ correlacao_caracteres <- function(df, caracteres) {
         title.position = "top", title.hjust = 0.5
       )
     )
+  filename <- paste0("./images/", title, ".png")
   
-  ggsave("./images/correlação fenotípica.png", plot, width=6, height=6, dpi=200)
+  ggsave(filename, plot, width=6, height=6, dpi=200)
 }
 
-q5_plot <- function() {
-  correlacao_caracteres(dataset, c(
-    23, 24, 25, 26, # caracteres filiais (SEMS)
-    16, 17, 18, 19  # caracteres parentais
-  ))
+
+# Calcula e plota a herdabilidade de um caractere
+regressao <- function(df, x, y, xlab, ylab) {
+  f <- as.formula(paste(y, "~", x)) # y ~ x
+  model <- lm(f, data=df)
+  
+  # Valores arredondados para 4 casas decimais
+  slope <- round(coef(model)[2], 4)
+  intercept <- round(coef(model)[1], 4)
+  r2 <- round(summary(model)$r.squared, 4)
+  
+  # Gambiarrinha honesta para exibir a equação da reta ajustada
+  label = paste0("y = ", slope, "x - ", abs(intercept), "  R² = ", r2)
+  
+  # Retorna o plot do caractere filial x caractere parental
+  plot <- ggplot(df, aes_string(x, y)) +
+    geom_point(color="steelblue") + 
+    geom_smooth(method="lm", se=TRUE, color="gray20") +
+    annotate(
+      "text",
+      x=Inf, y=Inf, hjust=1.4, vjust=1.5, size=4, # tentativa e erro
+      label=label
+    ) +
+    theme_minimal() +
+    labs(x=xlab, y=ylab)
+  
+  return(plot)
 }
 
 # FONTES
