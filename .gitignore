@@ -49,5 +49,5 @@ po/*~
 rsconnect/
 
 # Project Specifics
-dataset.csv
-images/
+*.csv
+*images/

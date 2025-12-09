@@ -19,12 +19,12 @@ peso_sexo_geracao <- function(df) {
     ) %>%
     mutate(
       group = case_when(
-        variavel == "pesoFilial" & sexo == "F" ~ "F1 F",
-        variavel == "pesoMaeJovem" ~ "F0 Jovem F",
-        variavel == "pesoMae" ~ "F0 F",
-        variavel == "pesoFilial" & sexo == "M" ~ "F1 M",
-        variavel == "pesoPaiJovem" ~ "F0 Jovem M",
-        variavel == "pesoPai" ~ "F0 M"
+        variavel == "Peso_Filial" & sexo == "F" ~ "F1 F",
+        variavel == "Peso_Mae_Jovem" ~ "F0 Jovem F",
+        variavel == "Peso_Mae" ~ "F0 F",
+        variavel == "Peso_Filial" & sexo == "M" ~ "F1 M",
+        variavel == "Peso_Pai_Jovem" ~ "F0 Jovem M",
+        variavel == "Peso_Pai" ~ "F0 M"
       )
     ) %>%
     mutate(
@@ -78,10 +78,10 @@ caracteres_por_sexo <- function(df, caractere, ylab) {
 # Plota a comparação de todos os caracteres entre os sexos
 sexo_f1_plots <- function(df) {
   # Gera o plot para cada caractere
-  altura <- caracteres_por_sexo(df, "alturaFilial", ylab="Altura")
-  peso <- caracteres_por_sexo(df, "pesoFilial", ylab="Peso")
-  pe <- caracteres_por_sexo(df, "peFilial", ylab="Comprimento do Pé")
-  pesoNasc <- caracteres_por_sexo(df, "pesoNascFilial", ylab="Peso ao Nascimento")
+  altura <- caracteres_por_sexo(df, "Altura_Filial", ylab="Altura")
+  peso <- caracteres_por_sexo(df, "Peso_Filial", ylab="Peso")
+  pe <- caracteres_por_sexo(df, "Pe_Filial", ylab="Comprimento do Pé")
+  pesoNasc <- caracteres_por_sexo(df, "Peso_Nasc_Filial", ylab="Peso ao Nascimento")
   
   # Exibe todos os plots em um grid 2x2
   plot <- grid.arrange(altura, peso, pe, pesoNasc, ncol = 2)

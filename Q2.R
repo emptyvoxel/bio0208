@@ -34,5 +34,5 @@ q2_plot <- function(df, fenotipo, locus, xlab, ylab) {
   ggsave("./images/efeito médio de substituição.png", plot, width=6, height=4, dpi=200)
 }
 
-q2_plot(dataset, "alturaMae", "g1_c17_M", "Genótipo g1_c17", "Altura Materna")
+q2_plot(dataset, "Altura_Mae", "g1_c17_M", "Genótipo g1_c17", "Altura Materna")
 
