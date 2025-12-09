@@ -1,4 +1,3 @@
-# Helper functions para a P2 de Processos
 library("ggplot2")
 library("tidyr")
 library("dplyr")
@@ -60,6 +59,7 @@ correlacao_caracteres <- function(df, caracteres) {
   ggsave("./images/correlação fenotípica.png", plot, width=6, height=6, dpi=200)
 }
 
+# plota as correlações entre todos os caracteres (filiais e parentais)
 q5_plot <- function() {
   correlacao_caracteres(dataset, c(
     23, 24, 25, 26, # caracteres filiais (SEMS)
